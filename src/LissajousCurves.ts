@@ -48,8 +48,10 @@ export class LissajousCurves {
     var t = 0;
     var x = A * Math.sin(a * t + this.phaseDifference);
     var y = B * Math.sin(b * t);
-    ctx.fillStyle = "black";
-    ctx.lineWidth = 3;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "#3F3";
+    ctx.strokeStyle = "#3F3";
+    ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.moveTo(this.width / 2 + x, this.height / 2 + y);
     for (var i = 0; i < 1000; i++) {
@@ -61,6 +63,8 @@ export class LissajousCurves {
     }
     ctx.stroke();
     ctx.closePath();
+
+    ctx.shadowBlur = 0;
     ctx.font = "25px pixel";
     ctx.fillStyle = "black";
     ctx.textBaseline = "top";
