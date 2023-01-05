@@ -7,11 +7,13 @@ export class LissajousCurves {
 
   frequencyRatio: number;
   deltaPhaseDifference: number;
-
+  A: number;
+  B: number;
   constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
-
+    this.A = this.width / 2 - 50;
+    this.B = this.height / 2 - 50;
     this.points = [
       [1, 1],
       [1, 2],
@@ -42,31 +44,16 @@ export class LissajousCurves {
     var a = this.points[this.frequencyRatio][0];
     var b = this.points[this.frequencyRatio][1];
 
-    var A = this.width / 2 - 50;
-    var B = this.height / 2 - 50;
-
-    var t = 0;
-    var x = A * Math.sin(a * t + this.phaseDifference);
-    var y = B * Math.sin(b * t);
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = "#3F3";
-    ctx.strokeStyle = "#3F3";
     ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(this.width / 2 + x, this.height / 2 + y);
-    for (var i = 0; i < 1000; i++) {
-      t += 0.01;
-      x = A * Math.sin(a * t + this.phaseDifference);
-      y = B * Math.sin(b * t);
 
-      ctx.lineTo(this.width / 2 + x, this.height / 2 + y);
+    var d = 0.02;
+    for (var i = d; i < 2 * Math.PI + d; i += d) {
+      this.drawLineSegment(ctx, i - d, i, a, b);
     }
-    ctx.stroke();
-    ctx.closePath();
 
     ctx.shadowBlur = 0;
     ctx.font = "25px pixel";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#ffffff";
     ctx.textBaseline = "top";
     var text = `Freq ratio: ${a}:${b}, Phase: ${
       this.phases[
@@ -74,5 +61,29 @@ export class LissajousCurves {
       ]
     }`;
     ctx.fillText(text, 10, this.height - 30);
+  }
+
+  drawLineSegment(
+    ctx: CanvasRenderingContext2D,
+    start: number,
+    end: number,
+    a: number,
+    b: number
+  ) {
+    var x = this.A * Math.sin(a * start + this.phaseDifference);
+    var y = this.B * Math.sin(b * start);
+    ctx.strokeStyle = "hsl(" + (start / (2 * Math.PI)) * 360 + ",100%,50%)";
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "hsl(" + (start / (2 * Math.PI)) * 360 + ",100%,50%)";
+
+    ctx.beginPath();
+    ctx.moveTo(this.width / 2 + x, this.height / 2 + y);
+    for (var t = start + 0.01; t <= end + 0.01; t += 0.01) {
+      x = this.A * Math.sin(a * t + this.phaseDifference);
+      y = this.B * Math.sin(b * t);
+      ctx.lineTo(this.width / 2 + x, this.height / 2 + y);
+    }
+    ctx.stroke();
+    ctx.closePath();
   }
 }
