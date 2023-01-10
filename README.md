@@ -5,7 +5,7 @@ Visualizing Lissajous Curves by cycling through phase & frequency ratio.
 
 Clone
 ```
-git clone https://github.com/Timmoth/retrotetris.git
+git clone https://github.com/Timmoth/LissajousCurves.git
 ```
 Build
 ```
